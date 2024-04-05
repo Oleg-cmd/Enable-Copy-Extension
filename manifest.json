@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Enable Copy Extension",
-    "version": "1.0",
+    "version": "1.0.1",
     "description": "Allows copying text from any page.",
     "permissions": [
       "activeTab",
