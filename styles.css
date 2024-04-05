@@ -1,0 +1,18 @@
+/* styles.css */
+
+.popup {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  padding: 10px 15px 10px 15px;
+  cursor: pointer;
+}
