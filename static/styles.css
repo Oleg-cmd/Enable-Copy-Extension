@@ -15,4 +15,7 @@
   border: 1px solid transparent;
   padding: 10px 15px 10px 15px;
   cursor: pointer;
+  user-select: none;
+  width: 200px;
+  text-align: center;
 }
