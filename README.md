@@ -22,6 +22,6 @@ CSS and JavaScript override: The extension effectively overrides CSS properties 
 Local state storage: Uses chrome.storage.local to save settings to enable or disable extension features, allowing users to save their preferences.
 
 
-## Badges
+## Links
 
 Link to the Firefox app store: [Enable Copy Extension](https://addons.mozilla.org/ru/firefox/addon/enable-copy-extension)
