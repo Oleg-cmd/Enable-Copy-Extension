@@ -5,9 +5,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cross-env NODE_ENV=production webpack --mode production",
-    "dev": "cross-env NODE_ENV=development webpack --mode development --watch"
+    "dev": "cross-env NODE_ENV=development webpack --mode development --watch",
+    "package-source": "node build-source.js"
   },
   "devDependencies": {
+    "archiver": "^7.0.1",
     "copy-webpack-plugin": "^13.0.0",
     "cross-env": "^7.0.3",
     "webpack": "^5.99.4",
