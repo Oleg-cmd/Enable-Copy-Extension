@@ -8,6 +8,12 @@
   "background": {
     "scripts": ["scripts/background/main.js"]
   },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{76f7bd65-2343-4cb0-bfb3-ebe23dd190e9}",
+      "strict_min_version": "109.0"
+    }
+  },
   "action": {
     "default_popup": "./static/popup.html",
     "default_icon": {
