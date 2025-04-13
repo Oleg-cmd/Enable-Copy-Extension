@@ -1,21 +1,56 @@
 /* styles.css */
 
+body {
+  width: 230px;
+  padding: 10px;
+}
+
 .popup {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 8px;
 }
 
 .btn {
-  background-color: #000;
+  background-color: #007bff;
   color: #fff;
   border-radius: 5px;
   border: 1px solid transparent;
-  padding: 10px 15px 10px 15px;
+  padding: 10px 15px;
   cursor: pointer;
   user-select: none;
-  width: 200px;
+  width: 100%;
+  box-sizing: border-box;
   text-align: center;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.btn.btn-secondary {
+  background-color: #6c757d;
+}
+
+.btn.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.tooltip {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+  margin-top: 5px;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
 }

@@ -1,0 +1,17 @@
+{
+  "name": "enable-copy-extension",
+  "version": "2.0.0",
+  "description": "Allows copying text from pages that try to prevent it. Includes a force mode for stubborn sites.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cross-env NODE_ENV=production webpack --mode production",
+    "dev": "cross-env NODE_ENV=development webpack --mode development --watch"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^13.0.0",
+    "cross-env": "^7.0.3",
+    "webpack": "^5.99.4",
+    "webpack-cli": "^6.0.1",
+    "zip-webpack-plugin": "^4.0.3"
+  }
+}

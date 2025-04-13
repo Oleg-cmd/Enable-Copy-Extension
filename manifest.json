@@ -1,20 +1,24 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Enable Copy Extension",
-  "version": "1.0.2",
-  "description": "Allows copying text from any page.",
-  "permissions": ["activeTab", "<all_urls>", "storage"],
+  "version": "2.0.0",
+  "description": "Allows copying text from pages that try to prevent it. Includes a force mode for stubborn sites.",
+  "permissions": ["activeTab", "storage", "scripting", "tabs"],
+  "host_permissions": ["<all_urls>"],
   "background": {
-    "scripts": ["./scripts/background.js"],
-    "persistent": false
+    "scripts": ["scripts/background/main.js"]
   },
-  "browser_action": {
+  "action": {
     "default_popup": "./static/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",
       "128": "icons/icon128.png"
     }
+  },
+  "options_ui": {
+    "page": "./static/options.html",
+    "open_in_tab": true
   },
   "icons": {
     "16": "icons/icon16.png",
@@ -24,8 +28,9 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["./scripts/content.js"],
-      "run_at": "document_idle"
+      "js": ["scripts/content/content.js"],
+      "run_at": "document_idle",
+      "all_frames": true
     }
   ]
 }

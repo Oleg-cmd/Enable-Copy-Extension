@@ -1,2 +1,16 @@
 .DS_Store
 archive.zip
+node_modules
+package-lock.json
+yarn-error.log
+yarn-error.log
+npm-debug.log
+npm-debug.log.*
+*.tgz
+*.log
+*.swp
+*.swo
+*.swm   
+dist
+scripts
+releases

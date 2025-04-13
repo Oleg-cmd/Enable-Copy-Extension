@@ -11,17 +11,73 @@
       type="text/css"
       href="./styles.css"
     />
-    <title>Toggle Copying</title>
+    <title>Enable Copy Control</title>
   </head>
   <body>
     <div class="popup">
+      <!-- Elements with IDs used by uiUpdater.js -->
       <div
         class="btn"
         id="toggleExtension"
       >
-        Disable extension
+        Loading...
       </div>
-      <script src="../scripts/popup.js"></script>
+      <div
+        class="btn btn-secondary"
+        id="forceEnable"
+      >
+        Loading...
+      </div>
+      <div
+        class="tooltip"
+        id="forceTooltip"
+        style="display: none"
+      >
+        Use Force Copy mode only if normal mode doesn't work. May break site
+        features. Will need full page reload to disable Force Copy mode.
+      </div>
+      <div
+        id="whitelistSection"
+        style="
+          margin-top: 15px;
+          padding-top: 10px;
+          border-top: 1px solid #eee;
+          text-align: center;
+          width: 100%;
+        "
+      >
+        <div
+          id="whitelistStatus"
+          style="
+            color: #e65100;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: none;
+          "
+        ></div>
+        <button
+          id="addToWhitelist"
+          class="btn"
+          style="
+            background-color: #ffc107;
+            color: #000;
+            width: 100%;
+            margin-bottom: 5px;
+          "
+        >
+          Loading...
+        </button>
+        <button
+          id="manageWhitelist"
+          class="btn"
+          style="background-color: #17a2b8; color: #fff; width: 100%"
+        >
+          Manage Whitelist
+        </button>
+      </div>
     </div>
+
+    <!-- Load the single BUNDLED popup script -->
+    <script src="../scripts/popup/popup.js"></script>
   </body>
 </html>
