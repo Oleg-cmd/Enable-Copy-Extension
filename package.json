@@ -1,12 +1,13 @@
 {
   "name": "enable-copy-extension",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Allows copying text from pages that try to prevent it. Includes a force mode for stubborn sites.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "dev": "cross-env NODE_ENV=development webpack --mode development --watch",
-    "package-source": "node build-source.js"
+    "package-source": "node build-source.js",
+    "postinstall": "node scripts/patch-tesseract.js"
   },
   "devDependencies": {
     "archiver": "^7.0.1",
@@ -15,5 +16,8 @@
     "webpack": "^5.99.4",
     "webpack-cli": "^6.0.1",
     "zip-webpack-plugin": "^4.0.3"
+  },
+  "dependencies": {
+    "tesseract.js": "^7.0.0"
   }
 }

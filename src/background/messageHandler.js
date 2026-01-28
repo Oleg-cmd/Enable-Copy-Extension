@@ -1,9 +1,10 @@
 // src/background/messageHandler.js
 
-import { STATE, log, errorLog } from "../shared/utils.js";
-import * as WhitelistManager from "./whitelistManager.js";
-import * as StateManager from "./stateManager.js";
+import { STATE, errorLog, log } from "../shared/utils.js";
 import { sendCommandToContent } from "./commandSender.js"; // Use the dedicated sender
+import { performOCR } from "./ocrManager.js";
+import * as StateManager from "./stateManager.js";
+import * as WhitelistManager from "./whitelistManager.js";
 
 // --- Specific Handlers ---
 
@@ -202,7 +203,34 @@ export function handleMessage(message, sender, sendResponse) {
     try {
       let response;
       // Route based on action prefix or specific name
-      if (action === "queryStateForPopup") {
+      if (action === "captureVisibleTab") {
+        try {
+          const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+          if (tabs.length === 0) {
+            throw new Error("No active tab found");
+          }
+          log(`Message Handler: Capturing tab ${tabs[0].id} in window ${tabs[0].windowId}`);
+          const dataUrl = await chrome.tabs.captureVisibleTab(tabs[0].windowId, { format: "png" });
+          log(`Message Handler: Captured ${dataUrl ? dataUrl.length : 0} bytes`);
+          if (!dataUrl) {
+            throw new Error("captureVisibleTab returned empty data");
+          }
+          response = { success: true, dataUrl };
+        } catch (captureErr) {
+          const msg = captureErr?.message || String(captureErr) || "Screenshot capture failed";
+          errorLog(`Capture Action Failed: ${msg}`);
+          response = { success: false, error: msg };
+        }
+      } else if (action === "performBackgroundOCR") {
+        try {
+          const extractedText = await performOCR(message.image);
+          response = { success: true, text: extractedText };
+        } catch (ocrErr) {
+          const msg = ocrErr?.message || String(ocrErr) || "Internal OCR Error";
+          errorLog(`OCR Action Failed: ${msg}`);
+          response = { success: false, error: msg };
+        }
+      } else if (action === "queryStateForPopup") {
         response = await handleQueryState(sender);
       } else if (action === "reportActualState") {
         response = await handleReportState(message, sender);
@@ -220,7 +248,7 @@ export function handleMessage(message, sender, sendResponse) {
       errorLog(`Error processing action ${action}:`, error);
       sendResponse({
         success: false,
-        error: error.message || "Internal background error",
+        error: error?.message || String(error) || "Internal background error",
       });
     }
   })();

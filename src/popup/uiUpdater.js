@@ -12,7 +12,7 @@ function getElements() {
       forceTooltip: document.getElementById("forceTooltip"),
       whitelistStatus: document.getElementById("whitelistStatus"),
       addToWhitelistButton: document.getElementById("addToWhitelist"),
-      manageWhitelistButton: document.getElementById("manageWhitelist"),
+      settingsButton: document.getElementById("settingsButton"),
       // Add any other elements you might need to update
     };
     // Basic check if elements exist
@@ -114,11 +114,11 @@ function updateWhitelistUI(
   if (
     !els?.whitelistStatus ||
     !els?.addToWhitelistButton ||
-    !els?.manageWhitelistButton
+    !els?.settingsButton
   )
     return;
 
-  els.manageWhitelistButton.disabled = false; // Manage button is always enabled
+  els.settingsButton.disabled = false; // Settings button is always enabled
 
   if (!isOperablePage) {
     els.whitelistStatus.textContent = "Extension inactive on this page.";
@@ -180,8 +180,8 @@ export function showErrorState(message = "Error loading status.") {
     els.whitelistStatus.style.display = "block";
     els.whitelistStatus.style.color = "red";
   }
-  // Keep manage whitelist enabled
-  if (els.manageWhitelistButton) els.manageWhitelistButton.disabled = false;
+  // Keep settings button enabled
+  if (els.settingsButton) els.settingsButton.disabled = false;
 }
 
 /**
@@ -193,6 +193,7 @@ export function showErrorState(message = "Error loading status.") {
  * @param {boolean} state.isWhitelisted - Is the current site whitelisted?
  * @param {string|null} state.currentHostname - The hostname of the current site.
  * @param {boolean} state.isOperablePage - Can the extension run on this page type?
+ * @param {string|null} state.currentTabUrl - The current tab URL
  */
 export function updateAllUI(state) {
   log("Updating all UI elements with state:", state);

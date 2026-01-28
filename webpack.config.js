@@ -56,6 +56,19 @@ module.exports = {
         { from: "manifest.json", to: "." }, // Copy manifest.json to dist root
         { from: "icons", to: "icons" }, // Copy icons folder to dist/icons
         { from: "static", to: "static" }, // Copy static folder to dist/static
+        // tesseract
+        {
+          from: "node_modules/tesseract.js/dist/worker.min.js",
+          to: "static/tesseract/worker.min.js",
+        },
+        {
+          from: "node_modules/tesseract.js-core/tesseract-core-simd.wasm.js",
+          to: "static/tesseract/tesseract-core-simd.wasm.js",
+        },
+        {
+          from: "node_modules/tesseract.js-core/tesseract-core-simd.wasm",
+          to: "static/tesseract/tesseract-core-simd.wasm",
+        },
       ],
     }),
     // Plugin to create a zip archive AFTER the build is complete

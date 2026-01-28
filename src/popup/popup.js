@@ -1,13 +1,14 @@
 // src/popup/popup.js
 
-import { STATE, log, errorLog, getRelevantHostname } from "../shared/utils.js";
-import { updateAllUI, showLoadingState, showErrorState } from "./uiUpdater.js";
+import { STATE, errorLog, getRelevantHostname, log } from "../shared/utils.js";
 import {
-  handleToggleClick,
-  handleForceClick,
   handleAddWhitelistClick,
-  handleManageWhitelistClick,
+  handleForceClick,
+  handleOCRClick,
+  handleSettingsClick,
+  handleToggleClick,
 } from "./eventHandlers.js";
+import { showErrorState, showLoadingState, updateAllUI } from "./uiUpdater.js";
 
 // --- Popup State Object ---
 // Encapsulates the current knowledge the popup has about the system state.
@@ -106,7 +107,8 @@ const popupState = {
       toggleButton: document.getElementById("toggleExtension"),
       forceButton: document.getElementById("forceEnable"),
       addToWhitelistButton: document.getElementById("addToWhitelist"),
-      manageWhitelistButton: document.getElementById("manageWhitelist"),
+      settingsButton: document.getElementById("settingsButton"),
+      startOCRButton: document.getElementById("startOCR"),
     };
 
     if (els.toggleButton) {
@@ -129,13 +131,16 @@ const popupState = {
       errorLog("Add whitelist button not found for listener.");
     }
 
-    if (els.manageWhitelistButton) {
-      els.manageWhitelistButton.addEventListener(
-        "click",
-        handleManageWhitelistClick
-      ); // Doesn't need state
+    if (els.settingsButton) {
+      els.settingsButton.addEventListener("click", handleSettingsClick); // Doesn't need state
     } else {
-      errorLog("Manage whitelist button not found for listener.");
+      errorLog("Settings button not found for listener.");
+    }
+
+    if (els.startOCRButton) {
+      els.startOCRButton.addEventListener("click", () => handleOCRClick(this));
+    } else {
+      errorLog("Start OCR button not found for listener.");
     }
 
     log("Listeners attached.");

@@ -30,7 +30,7 @@ Enable Copy Extension enhances your browsing by ensuring you can always copy tex
     *   Click "**Force Mode Active**" again to return to **Standard Mode**.
 4.  **Whitelisting:**
     *   Click "**Disable on [site.com]**" (or similar) to add the current website's domain to the whitelist. The extension will immediately become inactive on that page.
-    *   Click "**Manage Whitelist**" to open the extension's Options page, where you can view, add, or remove domains from the list.
+    *   Click "**Settings**" to open the extension's Options page, where you can view, add, or remove domains from the list.
 5.  **Status:** The popup indicates if the site is whitelisted or if the extension is inactive on the current page type (e.g., `about:` or `chrome:` pages).
 
 ## Disclaimer / Important Notes
@@ -51,3 +51,6 @@ Enable Copy Extension enhances your browsing by ensuring you can always copy tex
 ## Links
 
 Link to the Firefox Add-ons store: [Enable Copy Extension](https://addons.mozilla.org/ru/firefox/addon/enable-copy-extension)
+
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

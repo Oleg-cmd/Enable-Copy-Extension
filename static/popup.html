@@ -36,6 +36,44 @@
         Use Force Copy mode only if normal mode doesn't work. May break site
         features. Will need full page reload to disable Force Copy mode.
       </div>
+      <!-- OCR Tool Section -->
+      <div
+        id="ocrSection"
+        style="
+          margin-top: 15px;
+          padding-top: 10px;
+          border-top: 1px solid #eee;
+          text-align: center;
+          width: 100%;
+        "
+      >
+        <div
+          style="
+            color: #1a73e8;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 12px;
+          "
+        >
+          OCR Text Extractor
+        </div>
+        <button
+          id="startOCR"
+          class="btn"
+          style="
+            background-color: #1a73e8;
+            color: #fff;
+            width: 100%;
+            margin-bottom: 5px;
+          "
+        >
+          Select Area & Extract Text
+        </button>
+        <div
+          id="ocrStatus"
+          style="font-size: 11px; color: #666; margin-top: 5px; display: none"
+        ></div>
+      </div>
       <div
         id="whitelistSection"
         style="
@@ -68,11 +106,11 @@
           Loading...
         </button>
         <button
-          id="manageWhitelist"
+          id="settingsButton"
           class="btn"
           style="background-color: #17a2b8; color: #fff; width: 100%"
         >
-          Manage Whitelist
+          Settings
         </button>
       </div>
     </div>

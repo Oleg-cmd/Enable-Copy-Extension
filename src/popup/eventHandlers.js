@@ -1,8 +1,8 @@
 // src/popup/eventHandlers.js
 
-import { STATE, log, errorLog } from "../shared/utils.js";
+import { STATE, errorLog, log } from "../shared/utils.js";
 // Import UI functions needed for optimistic updates or temporary states
-import { updateAllUI, showLoadingState, showErrorState } from "./uiUpdater.js"; // Assuming UI functions are needed
+import { showErrorState } from "./uiUpdater.js"; // Assuming UI functions are needed
 
 /**
  * Sends a command message to the background script.
@@ -188,14 +188,94 @@ export function handleAddWhitelistClick(popupState) {
 }
 
 /**
- * Handles clicks on the "Manage Whitelist" button.
+ * Handles clicks on the "Settings button.
  */
-export function handleManageWhitelistClick() {
-  log("Handler: Manage Whitelist clicked.");
+export function handleSettingsClick() {
+  log("Handler: Settings clicked.");
   try {
     chrome.runtime.openOptionsPage();
   } catch (error) {
     errorLog("Handler: Failed to open options page:", error);
     showErrorState("Could not open options page.");
+  }
+}
+
+/**
+ * Handles clicks on the "Start OCR" button.
+ * @param {object} popupState - The current popup state object.
+ */
+export async function handleOCRClick(popupState) {
+  log("Handler: Start OCR clicked.");
+  const button = document.getElementById("startOCR");
+  const statusEl = document.getElementById("ocrStatus");
+
+  if (!button || button.disabled) {
+    log("Handler: Extract button disabled or not found, ignoring.");
+    return;
+  }
+
+  const tabId = popupState.currentTabId;
+  if (!tabId) {
+    errorLog("Handler: No tab ID available for extraction");
+    if (statusEl) {
+      statusEl.textContent = "Error: No active tab";
+      statusEl.style.color = "red";
+      statusEl.style.display = "block";
+    }
+    return;
+  }
+
+  // Provide immediate feedback
+  button.textContent = "Extracting...";
+  button.disabled = true;
+  if (statusEl) {
+    statusEl.textContent = "Processing...";
+    statusEl.style.color = "#1a73e8";
+    statusEl.style.display = "block";
+  }
+
+  try {
+    // Send OCR selection command to content script
+    const response = await chrome.tabs.sendMessage(tabId, {
+      action: "startOCRSelection",
+    });
+
+    if (chrome.runtime.lastError) {
+      throw new Error(chrome.runtime.lastError.message);
+    }
+
+    if (response && response.success) {
+      log("Handler: Google Docs extraction successful:", response);
+      button.textContent = "✓ Copied!";
+      if (statusEl) {
+        statusEl.textContent =
+          response.message || "Successfully copied to clipboard";
+        statusEl.style.color = "#0f9d58"; // Green
+      }
+
+      // Reset button after 2 seconds
+      setTimeout(() => {
+        button.textContent = "Select Area & Extract Text";
+        button.disabled = false;
+        if (statusEl) {
+          statusEl.style.display = "none";
+        }
+      }, 2000);
+    } else {
+      throw new Error(response?.message || "Extraction failed");
+    }
+  } catch (error) {
+    errorLog("Handler: Google Docs extraction failed:", error);
+    button.textContent = "✗ Failed";
+    if (statusEl) {
+      statusEl.textContent = error.message || "Extraction failed";
+      statusEl.style.color = "red";
+    }
+
+    // Reset button after 3 seconds
+    setTimeout(() => {
+      button.textContent = "Select Area & Extract Text";
+      button.disabled = false;
+    }, 3000);
   }
 }
