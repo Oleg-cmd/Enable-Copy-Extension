@@ -48,6 +48,14 @@ Enable Copy Extension enhances your browsing by ensuring you can always copy tex
 *   Uses `chrome.runtime` messaging for communication between the popup, background script, and content scripts.
 *   Uses `chrome.scripting` API where applicable (Manifest V3).
 
+## Third-Party Libraries
+
+This extension uses the following open-source libraries:
+
+- **[Tesseract.js](https://github.com/naptha/tesseract.js)** - Pure Javascript OCR (Apache-2.0 License)
+  - We apply an automatic patch during build to fix a bug in v7 (see `scripts/patch-tesseract.js`)
+  - Language data files are from [tessdata repository](https://github.com/tesseract-ocr/tessdata)
+
 ## Links
 
 Link to the Firefox Add-ons store: [Enable Copy Extension](https://addons.mozilla.org/ru/firefox/addon/enable-copy-extension)
