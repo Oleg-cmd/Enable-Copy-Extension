@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Enable Copy Extension",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Allows copying text from pages that try to prevent it. Includes a force mode for stubborn sites.",
-  "permissions": ["activeTab", "storage", "scripting", "tabs"],
+  "permissions": ["storage", "tabs", "unlimitedStorage", "activeTab"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "scripts": ["scripts/background/main.js"]
@@ -21,6 +21,9 @@
       "32": "icons/icon32.png",
       "128": "icons/icon128.png"
     }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; object-src 'self';"
   },
   "options_ui": {
     "page": "./static/options.html",

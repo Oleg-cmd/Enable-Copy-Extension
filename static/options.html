@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
-    <title>Enable Copy - Whitelist Settings</title>
+    <title>Enable Copy - Settings</title>
     <style>
       /* Basic styles inline for simplicity */
       body {
@@ -78,10 +78,69 @@
         text-align: center;
         height: 1.5em;
       } /* Increased height */
+
+      /* OCR Language Styles */
+      .lang-item {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        border: 1px solid #eee;
+        border-radius: 3px;
+        background-color: #fafafa;
+      }
+      .lang-item input[type="checkbox"] {
+        margin-bottom: 5px;
+        margin-right: 8px;
+        cursor: pointer;
+      }
+      .lang-item label {
+        flex-grow: 1;
+        cursor: pointer;
+        user-select: none;
+      }
+      .lang-item button {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 11px;
+        margin-left: 10px;
+      }
+      .lang-item button:hover {
+        background-color: #d32f2f;
+      }
+
+      /* Hide default file input */
+      #uploadLang {
+        display: none;
+      }
+      
+      /* Custom file upload button */
+      .custom-file-upload {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 0.95em;
+        font-weight: 500;
+        transition: background-color 0.2s;
+        text-align: center;
+      }
+      .custom-file-upload:hover {
+        background-color: #1976d2;
+      }
+      .custom-file-upload:active {
+        background-color: #0d47a1;
+      }
     </style>
   </head>
   <body>
-    <h1>Whitelist Settings</h1>
+    <h1>Settings</h1>
     <p>
       The extension will not run on the domains listed below. Enter only the
       main part of the domain (e.g., <code>example.com</code>,
@@ -108,6 +167,100 @@
       <!-- Status messages appear here -->
     </div>
 
+    <div
+      id="ocrContainer"
+      style="
+        margin-top: 30px;
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 5px;
+      "
+    >
+      <h2>OCR Settings (Text Extraction)</h2>
+
+      <!-- Блок инструкции -->
+      <div
+        style="
+          background-color: #e3f2fd;
+          border-left: 5px solid #2196f3;
+          padding: 10px;
+          margin-bottom: 15px;
+          font-size: 0.9em;
+          line-height: 1.4;
+        "
+      >
+        <strong>How to add more languages:</strong>
+        <ol style="margin: 5px 0; padding-left: 20px">
+          <li>
+            Go to the
+            <a
+              href="https://github.com/naptha/tessdata/tree/gh-pages/4.0.0_best"
+              target="_blank"
+              style="color: #0d47a1; font-weight: bold"
+              >Tesseract Data Repository</a
+            >.
+          </li>
+          <li>
+            Find the file for your language (e.g.,
+            <code>fra.traineddata.gz</code> for French).
+          </li>
+          <li>Download it to your computer.</li>
+          <li>Click "Browse..." below and select the downloaded file.</li>
+        </ol>
+        <p style="margin: 5px 0 0 0; font-size: 0.85em; color: #555">
+          <em>Note: English (eng) is already included by default.</em>
+        </p>
+      </div>
+
+      <!-- Пояснительный текст -->
+      <div
+        style="
+          background-color: #fff3cd;
+          border-left: 5px solid #ffc107;
+          padding: 10px;
+          margin-bottom: 15px;
+          font-size: 0.9em;
+          line-height: 1.4;
+        "
+      >
+        <strong>Active Languages for OCR:</strong>
+        <p style="margin: 5px 0 0 0; color: #555">
+          Select which languages Tesseract should use when extracting text. You
+          can enable multiple languages at once for better recognition. English
+          is built-in and always available.
+        </p>
+      </div>
+
+      <div
+        id="langList"
+        style="
+          margin-bottom: 15px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+        "
+      >
+        <!-- Чекбоксы языков -->
+      </div>
+
+      <div style="border-top: 1px solid #eee; padding-top: 15px">
+        <div style="margin-bottom: 8px; font-weight: bold">
+          Upload new language file:
+        </div>
+        <input
+          type="file"
+          id="uploadLang"
+          accept=".gz"
+        />
+        <label for="uploadLang" class="custom-file-upload">
+          📁 Browse for .traineddata.gz file
+        </label>
+        <div
+          id="ocrStatus"
+          style="margin-top: 8px; font-size: 0.9em; font-weight: bold"
+        ></div>
+      </div>
+    </div>
     <!-- Load the single BUNDLED options script -->
     <script src="../scripts/options/options.js"></script>
   </body>

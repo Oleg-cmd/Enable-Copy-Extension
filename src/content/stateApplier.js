@@ -1,14 +1,14 @@
-import { STATE, log, errorLog } from "../shared/utils.js";
-import { applyCoreStyles, removeCoreStyles } from "./styleManager.js";
+import { STATE, log } from "../shared/utils.js";
 import {
   overrideEventRestrictions,
   removeEventRestrictions,
 } from "./eventManager.js";
 import {
+  isForceOverrideActive,
   overrideAddEventListener,
   resetForceOverrideState, // Use only reset, not restore!
-  isForceOverrideActive,
 } from "./forceModeManager.js";
+import { applyCoreStyles, removeCoreStyles } from "./styleManager.js";
 // Import both functions from attributeManager
 import {
   cleanupElementAttributes,

@@ -1,12 +1,14 @@
 // src/content/communication.js
 
-import { STATE, log, errorLog } from "../shared/utils.js";
+import { STATE, errorLog, log } from "../shared/utils.js";
 // Import the functions that apply state changes
 import {
-  enableCopyingStandard,
-  enableCopyingForce,
   disableCopying,
+  enableCopyingForce,
+  enableCopyingStandard,
 } from "./stateApplier.js";
+// Import OCR selector
+import { selectAreaAndExtractText } from "./ocrSelector.js";
 
 // Need access to the whitelist status from the main content script
 // Pass it during initialization or provide a getter function if state is managed centrally.
@@ -48,6 +50,73 @@ export function reportActualState(state) {
  * @param {function} sendResponse
  */
 function messageListener(message, sender, sendResponse) {
+  // Handle OCR area selection (works regardless of whitelist status)
+  if (message.action === "startOCRSelection") {
+    log(
+      "communication: Received startOCRSelection command",
+      message.counter || 0
+    );
+    selectAreaAndExtractText()
+      .then(async (text) => {
+        if (text) {
+          log(`communication: OCR extracted ${text.length} characters`);
+          log(`communication: Text content: "${text.substring(0, 100)}..."`);
+
+          // Try to copy to clipboard using fallback method
+          let copySuccess = false;
+          try {
+            // Modern API - may fail due to user activation
+            await navigator.clipboard.writeText(text);
+            copySuccess = true;
+            log("communication: Successfully copied to clipboard (modern API)");
+          } catch (modernError) {
+            log(
+              "communication: Modern clipboard API failed, trying fallback method"
+            );
+            // Fallback: create temporary textarea
+            try {
+              const textarea = document.createElement("textarea");
+              textarea.value = text;
+              // Делаем элемент невидимым, но оставляем в DOM
+              textarea.style.position = "fixed";
+              textarea.style.opacity = "0";
+              document.body.appendChild(textarea);
+              textarea.focus(); // Важно добавить фокус
+              textarea.select();
+              const successful = document.execCommand("copy");
+              document.body.removeChild(textarea);
+              copySuccess = successful;
+            } catch (fallbackError) {
+              errorLog("Fallback clipboard failed", fallbackError);
+            }
+          }
+
+          sendResponse({
+            success: copySuccess,
+            message: copySuccess
+              ? `Successfully copied ${text.length} characters`
+              : `Extracted ${text.length} characters, but failed to copy. Please use Ctrl+V or paste manually.`,
+            textLength: text.length,
+            text: text,
+          });
+        } else {
+          log("communication: OCR returned empty text");
+          sendResponse({
+            success: false,
+            message: "OCR cancelled or failed",
+          });
+        }
+      })
+      .catch((error) => {
+        errorLog("communication: Error in OCR selection:", error);
+        sendResponse({
+          success: false,
+          message: `Error: ${error.message}`,
+        });
+      });
+    return true; // Keep message channel open for async response
+  }
+
   const isWhitelisted = getWhitelistStatus(); // Check current status
 
   if (isWhitelisted) {

@@ -1,6 +1,6 @@
 // src/content/forceModeManager.js
 
-import { log, errorLog } from "../shared/utils.js";
+import { errorLog, log } from "../shared/utils.js";
 
 // --- State for addEventListener override ---
 let storedOriginalAddEventListener = null; // Stores the reference *to be called* by the override
