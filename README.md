@@ -1,64 +1,97 @@
 # Enable Copy Extension
 
-## Briefly
+Enable Copy Extension is a browser extension that restores your ability to select and copy text on websites that try to block it. In addition to bypassing copy restrictions, it includes OCR (Optical Character Recognition) to extract text from images, PDFs, and protected documents.
 
-Allows copying text from any page by overriding restrictive styles and blocking scripts that prevent selection and copying.
+The project is fully open source and privacy-focused. No data is collected or sent anywhere.
+
+## Overview
+
+Many websites disable text selection, right-click menus, or copy actions using CSS and JavaScript. Enable Copy Extension neutralizes these restrictions and gives control back to the user.
+
+The extension works out of the box on most websites and provides an optional aggressive mode for especially stubborn cases. You can also whitelist sites where the extension should be disabled.
 
 ## Features
 
-Enable Copy Extension enhances your browsing by ensuring you can always copy text or interact with content, even on websites that try to prevent it. It provides user control over how and where the extension is active.
+Unlock copying on most websites by overriding restrictive CSS and blocking JavaScript handlers that prevent selection or copying.
 
-*   **Unlock Copying:** Overcomes common techniques used to block text selection and copying, including CSS (`user-select: none;`) and JavaScript event listeners (e.g., `oncopy`, `oncontextmenu`, `onselectstart`).
-*   **Two Operating Modes:** Choose the level of intervention needed:
-    *   **Standard Mode (Default):** Uses CSS overrides and intercepts specific JavaScript events in the capture phase. Generally sufficient for most websites and designed to minimize interference with site functionality.
-    *   **Force Mode (Risky):** Employs more aggressive techniques, including **overriding the browser's core `addEventListener` function** for specific elements. This can unlock copying on very stubborn sites but has a **higher risk of breaking website features** (like buttons, menus, or login fields). Use with caution!
-*   **Whitelist Functionality:** Easily disable the extension on specific domains where it's not needed or causes issues. Add the current site directly from the popup or manage the full list via the Options page.
-*   **Simple Popup Control:** Manage the extension's state directly from the browser toolbar:
-    *   Globally enable/disable the extension.
-    *   Switch between Standard and Force modes for the active tab.
-    *   Quickly add the current website to the whitelist.
-    *   Access the full whitelist management page.
-*   **Persistent Settings:** Your global enabled/disabled state and whitelist are saved using `chrome.storage.local`.
+Two operating modes are available.
+
+Standard Mode (default) safely restores copying by applying CSS overrides and intercepting blocking events in the capture phase. It is designed to work on the majority of websites with minimal side effects.
+
+Force Mode (risky) uses more aggressive techniques to defeat advanced copy protection. It overrides the browser’s `addEventListener` mechanism for specific events, which can break site functionality such as buttons, menus, or forms. Use only when Standard Mode is not enough.
+
+Whitelist functionality allows you to disable the extension on specific domains. Sites can be added directly from the popup or managed through the Options page.
+
+Simple popup controls allow you to enable or disable the extension globally, switch between Standard and Force modes for the current tab, add the current site to the whitelist, and open the settings page.
+
+OCR (text recognition) allows extracting text from images, PDFs, and protected content using Tesseract.js.
+
+Persistent settings are stored locally using `chrome.storage.local`.
+
+## OCR Support
+
+English OCR is included by default.
+
+Additional languages can be added manually.
+
+To add OCR languages, open the Options page and go to OCR Languages. Download `.traineddata.gz` files from the official Tesseract OCR tessdata repository. Click “Upload Language File”, select the downloaded file, choose the languages you want to use, and start scanning.
+
+All OCR processing happens locally in the browser. No images or text are uploaded anywhere.
 
 ## How to Use
 
-1.  **Click the Extension Icon:** Find the Enable Copy Extension icon in your browser toolbar to open the popup.
-2.  **Global Toggle:** The top button ("Enable Extension" / "Disable Extension") controls whether the extension is active globally.
-3.  **Mode Selection:**
-    *   If the extension is enabled and the site isn't whitelisted, it defaults to **Standard Mode**.
-    *   Click the "**Force Copy (Risky)**" button to activate **Force Mode** for the current tab. The button text will change to "**Force Mode Active**".
-    *   Click "**Force Mode Active**" again to return to **Standard Mode**.
-4.  **Whitelisting:**
-    *   Click "**Disable on [site.com]**" (or similar) to add the current website's domain to the whitelist. The extension will immediately become inactive on that page.
-    *   Click "**Settings**" to open the extension's Options page, where you can view, add, or remove domains from the list.
-5.  **Status:** The popup indicates if the site is whitelisted or if the extension is inactive on the current page type (e.g., `about:` or `chrome:` pages).
+Click the Enable Copy Extension icon in the browser toolbar to open the popup.
 
-## Disclaimer / Important Notes
+Use the global toggle at the top of the popup to enable or disable the extension entirely.
 
-*   **Force Mode Warning:** Force Mode is powerful but **can break websites**. Buttons, links, menus, forms, and other interactive elements may stop working correctly. Use it only when Standard Mode fails and you understand the risks.
-*   **Page Reload for Force Mode Deactivation:** Due to the invasive nature of Force Mode (overriding `addEventListener`), its effects might not fully disappear immediately when switching back to Standard Mode or disabling the extension. **A page reload is often required** to completely restore the website's original event handling after using Force Mode.
-*   **Potential Interference:** While designed to be minimally intrusive, any extension modifying website behavior *could* potentially conflict with complex web applications. If you encounter issues on a specific site, try adding it to the whitelist.
+When enabled and the current site is not whitelisted, the extension runs in Standard Mode by default.
 
-## Technical Details (Briefly)
+If copying is still blocked, activate Force Mode by clicking the “Force Copy (Risky)” button. When Force Mode is active, the button label will change to indicate this.
 
-*   Injects CSS to enforce `user-select: text !important;` and `pointer-events: auto !important;`.
-*   Uses capture-phase event listeners to call `event.stopImmediatePropagation()` for events like `copy`, `cut`, `contextmenu`, `selectstart`, `mousedown`.
-*   **Force Mode:** Additionally overrides `EventTarget.prototype.addEventListener` within the content script's context to prevent sites from adding new blocking listeners for certain events.
-*   Uses `chrome.storage.local` for storing the global enabled state and the whitelist array.
-*   Uses `chrome.runtime` messaging for communication between the popup, background script, and content scripts.
-*   Uses `chrome.scripting` API where applicable (Manifest V3).
+Click the Force Mode button again to return to Standard Mode.
+
+To disable the extension on the current website, click “Disable on [site.com]”. The site will be added to the whitelist and the extension will stop affecting it immediately.
+
+Use the Settings button to open the Options page and manage the full whitelist or OCR languages.
+
+The popup also shows status information if the site is whitelisted or if the extension cannot run on the current page type (for example `about:` or `chrome:` pages).
+
+## Important Notes
+
+Force Mode is powerful but dangerous. It can break website behavior, including buttons, links, menus, input fields, and login forms. Only use it when you understand the risks.
+
+Because Force Mode overrides core event handling, its effects may not fully disappear when switching back to Standard Mode or disabling the extension. Reloading the page is often required to fully restore normal behavior.
+
+Although the extension is designed to be minimally intrusive, it may conflict with complex web applications. If a site behaves incorrectly, add it to the whitelist.
+
+## Technical Details
+
+The extension injects CSS rules such as `user-select: text !important` and `pointer-events: auto !important`.
+
+It attaches capture-phase event listeners that stop propagation of events like `copy`, `cut`, `contextmenu`, `selectstart`, and `mousedown`.
+
+In Force Mode, it additionally overrides `EventTarget.prototype.addEventListener` in the page context to prevent websites from registering new blocking event listeners.
+
+Settings such as the global enabled state and whitelist are stored using `chrome.storage.local`.
+
+Communication between popup, background scripts, and content scripts is handled via `chrome.runtime` messaging.
+
+The extension is built for Manifest V3 and uses the `chrome.scripting` API where applicable.
 
 ## Third-Party Libraries
 
-This extension uses the following open-source libraries:
+This project uses the following open-source libraries.
 
-- **[Tesseract.js](https://github.com/naptha/tesseract.js)** - Pure Javascript OCR (Apache-2.0 License)
-  - We apply an automatic patch during build to fix a bug in v7 (see `scripts/patch-tesseract.js`)
-  - Language data files are from [tessdata repository](https://github.com/tesseract-ocr/tessdata)
+Tesseract.js – pure JavaScript OCR engine licensed under Apache-2.0.
+
+A small automatic patch is applied during build to fix a known issue in Tesseract.js v7 (see `scripts/patch-tesseract.js`).
+
+Language data files are taken from the official Tesseract tessdata repository.
 
 ## Links
 
-Link to the Firefox Add-ons store: [Enable Copy Extension](https://addons.mozilla.org/ru/firefox/addon/enable-copy-extension)
+Firefox Add-ons: [https://addons.mozilla.org/ru/firefox/addon/enable-copy-extension](https://addons.mozilla.org/ru/firefox/addon/enable-copy-extension)
 
+## License
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+MIT License
